@@ -28,4 +28,20 @@ const loginUser = (req, res) => {
   res.send('Login de usuario');
 };
 
-module.exports = { createNewUser, loginUser };
+//actualizar datos del usuario
+const updateUser = (req, res) => {
+  res.send('Actualizar datos del usuario');
+};
+
+//eliminar un usuario
+const deleteUser = (req, res) => {
+  res.send('Eliminar usuario');
+};
+
+//get all users
+const getAllUsers = async (req, res) => {
+  const userList = await User.find({});
+  res.status(200).json({ message: 'obtener todos los usuarios', data: userList });
+};
+
+module.exports = { createNewUser, loginUser, updateUser, deleteUser, getAllUsers };
