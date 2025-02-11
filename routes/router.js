@@ -14,7 +14,7 @@ router.post('/register', createNewUser);
 router.post('/login', loginUser);
 
 //actualizar datos del usuario
-router.put('/update', updateUser);
+router.put('/update/:id', updateUser);
 
 //eliminar usuario
 router.delete('/delete', deleteUser);
