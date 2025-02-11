@@ -1,5 +1,11 @@
 const router = require('express/lib/router');
-const { loginUser } = require('../controllers/user.controllers');
+const {
+  loginUser,
+  createNewUser,
+  updateUser,
+  deleteUser,
+  getAllUsers,
+} = require('../controllers/user.controllers');
 
 //crear un nuevo usuario
 router.post('/register', createNewUser);
