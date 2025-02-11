@@ -57,8 +57,23 @@ const updateUser = async (req, res) => {
 };
 
 //eliminar un usuario
-const deleteUser = (req, res) => {
-  res.send('Eliminar usuario');
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByIdAndDelete(id);
+    if (!User) {
+      return res.status(400).json({
+        message: 'Usuario no encontrado',
+      });
+    }
+    res.status(200).json({
+      message: 'usuario eliminado con éxito',
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error de servidor',
+    });
+  }
 };
 
 //get all users

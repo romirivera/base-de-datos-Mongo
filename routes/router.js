@@ -17,7 +17,7 @@ router.post('/login', loginUser);
 router.put('/update/:id', updateUser);
 
 //eliminar usuario
-router.delete('/delete', deleteUser);
+router.delete('/delete/:id', deleteUser);
 
 //obtener todos los usuarios
 router.get('/users', getAllUsers);
