@@ -5,6 +5,7 @@ const {
   updateUser,
   deleteUser,
   getAllUsers,
+  logout,
 } = require('../controllers/user.controllers');
 const authJWT = require('../middlewares/auth');
 
@@ -25,5 +26,8 @@ router.get('/users', authJWT, getAllUsers); //ruta protegida
 router.get('user.data', authJWT, (req, res) => {
   res.status(200).json({ message: 'Datos del usuario', data: req.user });
 });
+
+//cerrar sesión
+router.get('/logout', logout);
 
 module.exports = router;

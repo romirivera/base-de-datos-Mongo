@@ -22,6 +22,11 @@ const createNewUser = async (req, res) => {
       name: name,
       email: email,
       password: passwordHash,
+      rol: {
+        type: string,
+        default: 'user', //si no indica el rol, por defcto queda en user
+        emun: ['user', 'admin'], // o es user o admin
+      },
     });
     res.status(201).json({ message: 'Usuario creado con éxito' });
   } catch (error) {
@@ -51,7 +56,7 @@ const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: findUser._id, name: findUser.name },
+      { id: findUser._id, userType: findUser },
       proces.env.SECRET_JWT,
       {
         expiresIn: '1h',
@@ -59,14 +64,21 @@ const loginUser = async (req, res) => {
     );
     //el segundo argumento es la firma que utilizo para firmarlo
     //pusimos que token expira en 1 hora
-    res.status(200).json({
-      message: 'Usuario logueado correctamente',
-      data: {
-        name: findUser.name,
-        id: findUser._id,
-        token: token,
-      },
-    });
+    res
+      .status(200)
+      .cookie('token', token, {
+        httpOnly: true,
+        secure: false,
+        maxAge: 3600000,
+      })
+      .json({
+        message: 'Usuario logueado correctamente',
+        data: {
+          name: findUser.name,
+          id: findUser._id,
+          token: token,
+        },
+      });
   } catch (error) {
     res.status(500).jason({
       message: 'Error en el servidor',
@@ -137,8 +149,19 @@ const getDataUser = async (req, res) => {
       message: 'Datos del usuario',
       data: user,
     });
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json({ message: 'Error de servidor' });
+  }
 };
+const logout = (req, res) => {
+  res
+    .clearcookie('token', {
+      httpOnly: true,
+      secure: false,
+    })
+    .json({ message: 'Sesión cerrada' });
+};
+
 module.exports = {
   createNewUser,
   loginUser,
@@ -146,4 +169,5 @@ module.exports = {
   deleteUser,
   getAllUsers,
   getDataUser,
+  logout,
 };
