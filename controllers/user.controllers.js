@@ -1,4 +1,5 @@
 const User = require('../models/usermodels');
+const bcrypt = require('bcrypt');
 
 //crear un nuevo usuario
 //req=request : tendriamos disponible info que envía el cliente
@@ -10,11 +11,15 @@ const createNewUser = async (req, res) => {
   }
 
   try {
+    //guarddar contraseña
+    const salt = bcrypt.genSaltSyncd(); //define la dificultad de encriptado
+    const passwordHash = bcrypt.hashSync(password, salt); //encripta la contraseña
+
     await User.create({
       //codigo asincrono //body
       name: name,
       email: email,
-      password: password,
+      password: passwordHash,
     });
     res.status(201).json({ message: 'Usuario creado con éxito' });
   } catch (error) {
@@ -24,8 +29,36 @@ const createNewUser = async (req, res) => {
 };
 
 //hacer login
-const loginUser = (req, res) => {
-  res.send('Login de usuario');
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    //Se busca el registro en la colección de la base
+    const FindUser = await User.findOne({ email: email });
+    if (!FindUser) {
+      return res.status(400).json({
+        message: 'Ususario no encontrado',
+      });
+    }
+    //comparar(verificar) la contraseña
+    const passVerify = bcrypt.compareSync(password, findUser.password);
+    if (!passVerify) {
+      return res.status(400).json({
+        message: 'Contraseña incorrecta',
+      });
+    }
+    res.status(200).json({
+      message: 'Usuario logueado correctamente',
+      data: {
+        email: findUser.name,
+        id: findUser._id,
+      },
+    });
+  } catch (error) {
+    res.status(500).jason({
+      message: 'Error en el servidor',
+    });
+  }
 };
 
 //actualizar datos del usuario
