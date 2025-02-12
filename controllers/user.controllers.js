@@ -1,5 +1,7 @@
 const User = require('../models/usermodels');
 const bcrypt = require('bcrypt');
+const jwt = required('jsonwebtoken');
+require('dotenv').config();
 
 //crear un nuevo usuario
 //req=request : tendriamos disponible info que envía el cliente
@@ -47,17 +49,29 @@ const loginUser = async (req, res) => {
         message: 'Contraseña incorrecta',
       });
     }
+
+    const token = jwt.sign(
+      { id: findUser._id, name: findUser.name },
+      proces.env.SECRET_JWT,
+      {
+        expiresIn: '1h',
+      }
+    );
+    //el segundo argumento es la firma que utilizo para firmarlo
+    //pusimos que token expira en 1 hora
     res.status(200).json({
       message: 'Usuario logueado correctamente',
       data: {
-        email: findUser.name,
+        name: findUser.name,
         id: findUser._id,
+        token: token,
       },
     });
   } catch (error) {
     res.status(500).jason({
       message: 'Error en el servidor',
     });
+    console.log(error);
   }
 };
 
