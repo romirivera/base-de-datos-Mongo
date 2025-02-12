@@ -1,6 +1,6 @@
 const jwt = requre('jsonwebtoken');
 const authJWT = (req, res, next) => {
-  const token = req.header('Authoritation').replace('Bearer', '');
+  const token = req.header('Authoritation')?.replace('Bearer', '');
   if (!token) return res.status(401).json({ message: 'Acceso denegado, no hay token' });
 
   try {

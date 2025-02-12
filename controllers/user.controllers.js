@@ -129,4 +129,21 @@ const getAllUsers = async (req, res) => {
   res.status(200).json({ message: 'obtener todos los usuarios', data: userList });
 };
 // User.find permite traer todos los usuarios registrados
-module.exports = { createNewUser, loginUser, updateUser, deleteUser, getAllUsers };
+
+const getDataUser = async (req, res) => {
+  try {
+    const user = await user.findById(req.userId);
+    res.status(200).json({
+      message: 'Datos del usuario',
+      data: user,
+    });
+  } catch (error) {}
+};
+module.exports = {
+  createNewUser,
+  loginUser,
+  updateUser,
+  deleteUser,
+  getAllUsers,
+  getDataUser,
+};

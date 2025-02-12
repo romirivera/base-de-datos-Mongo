@@ -22,5 +22,8 @@ router.delete('/delete/:id', deleteUser);
 
 //obtener todos los usuarios
 router.get('/users', authJWT, getAllUsers); //ruta protegida
+router.get('user.data', authJWT, (req, res) => {
+  res.status(200).json({ message: 'Datos del usuario', data: req.user });
+});
 
 module.exports = router;
