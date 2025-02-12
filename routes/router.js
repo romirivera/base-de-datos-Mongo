@@ -8,6 +8,7 @@ const {
   logout,
 } = require('../controllers/user.controllers');
 const authJWT = require('../middlewares/auth');
+const isAdmin = require('../middlewares/isAdmin');
 
 //crear un nuevo usuario
 router.post('/register', createNewUser);
@@ -22,7 +23,7 @@ router.put('/update/:id', updateUser);
 router.delete('/delete/:id', deleteUser);
 
 //obtener todos los usuarios
-router.get('/users', authJWT, getAllUsers); //ruta protegida
+router.get('/users', authJWT, isAdmin, getAllUsers); //ruta protegida
 router.get('user.data', authJWT, (req, res) => {
   res.status(200).json({ message: 'Datos del usuario', data: req.user });
 });
