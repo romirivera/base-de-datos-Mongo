@@ -6,6 +6,7 @@ const {
   deleteUser,
   getAllUsers,
 } = require('../controllers/user.controllers');
+const authJWT = require('../middlewares/auth');
 
 //crear un nuevo usuario
 router.post('/register', createNewUser);
@@ -20,6 +21,6 @@ router.put('/update/:id', updateUser);
 router.delete('/delete/:id', deleteUser);
 
 //obtener todos los usuarios
-router.get('/users', getAllUsers);
+router.get('/users', authJWT, getAllUsers); //ruta protegida
 
 module.exports = router;
