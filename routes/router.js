@@ -6,6 +6,7 @@ const {
   deleteUser,
   getAllUsers,
   logout,
+  getDataUser,
 } = require('../controllers/user.controllers');
 const authJWT = require('../middlewares/auth');
 const isAdmin = require('../middlewares/isAdmin');
@@ -27,7 +28,7 @@ router.get('/users', authJWT, isAdmin, getAllUsers); //ruta protegida
 router.get('user.data', authJWT, (req, res) => {
   res.status(200).json({ message: 'Datos del usuario', data: req.user });
 });
-
+router.get('/user-data', authJWT, getDataUser);
 //cerrar sesión
 router.get('/logout', logout);
 
